@@ -5,8 +5,7 @@ const url = 'http://localhost:3000/meals';
 function getNowDatetime() {
   var mealTimeField = document.getElementById('meal-time');
   var now = new Date();
-  // mealTimeField.valueAsNumber = now.getTime();
-  mealTimeField.valueAsDate = "2016.05.18 16:30";
+  mealTimeField.valueAsNumber = now.getTime();
 }
 
 getNowDatetime();
