@@ -1,0 +1,35 @@
+{
+  "name": "calories-counter",
+  "version": "1.0.0",
+  "description": "Count calories.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pfeter/calories-counter.git"
+  },
+  "keywords": [
+    "calorie",
+    "counter"
+  ],
+  "author": "Peter Foldvary",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pfeter/calories-counter/issues"
+  },
+  "homepage": "https://github.com/Pfeter/calories-counter#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mysql": "^2.11.1"
+  },
+  "devDependencies": {
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.9.2",
+    "eslint-plugin-jsx-a11y": "^1.5.3",
+    "eslint-plugin-react": "^5.2.2"
+  }
+}
