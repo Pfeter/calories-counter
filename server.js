@@ -19,8 +19,8 @@ connection.connect(function (err) {
 });
 
 app.post('/meals', function (req, res) {
-  let newQuery = 'INSERT INTO meals (name, calorie, date) VALUES (?, ?, ?)';
-  const table = [req.body.name, req.body.calorie, req.body.date];
+  let newQuery = 'INSERT INTO meals (name, calories, date) VALUES (?, ?, ?)';
+  const table = [req.body.name, req.body.calories, req.body.date];
   newQuery = mysql.format(newQuery, table);
   connection.query(newQuery, function (err) {
     if (err) {
@@ -37,7 +37,7 @@ app.get('/meals', function (req, res) {
     if (err) {
       return console.log(err.toString());
     }
-    res.json({"meals": data});
+    res.json(data);   // res.json({ "meals": data });
   });
 });
 

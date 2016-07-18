@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+table {
+  border-style: solid 2px;
+}
+
 .input {
   text-align: center;
 }

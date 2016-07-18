@@ -9,10 +9,28 @@
       <h1>Calorie counter</h1>
       <section class="input">
         <input class="input-field" type="text" id="input-meal" placeholder="Meal" required>
-        <input class="input-field" type="number" id="input-calorie" placeholder="Calorie" required>
+        <input class="input-field" type="number" id="input-calories" placeholder="Calories" required>
         <input class="input-field" type="datetime-local" id="meal-time" required>
         <input class="add-button" type="submit" value="Add">
       </section>
+      <table>
+        <thead>
+          <tr>
+            <th>Meal</th>
+            <th>Calories</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td>Szum:</td>
+            <td id="sum-of-calories"></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody id="meals">
+        </tbody>
+      </table>
     </section>
     <script src="script/frontend.js"></script>
   </body>
