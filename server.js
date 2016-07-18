@@ -32,5 +32,14 @@ app.post('/meals', function (req, res) {
   });
 });
 
+app.get('/meals', function (req, res) {
+  connection.query('SELECT * FROM meals;', function (err, data) {
+    if (err) {
+      return console.log(err.toString());
+    }
+    res.json({"meals": data});
+  });
+});
+
 app.listen(3000);
 console.log('Server running');
