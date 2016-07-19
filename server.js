@@ -2,7 +2,6 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-// const mysql = require('mysql');
 const con = require('./CONFIG');
 const connection = con.con;
 
@@ -21,23 +20,31 @@ connection.connect(function (err) {
   console.log('Connection established');
 });
 
+app.get('/meals', function (req, res) {
+  var callback = function (result) {
+    res.json(result);
+  };
+  myMeal.getMeal(callback);
+});
+
 app.post('/meals', function (req, res) {
   var newMeal = {
     name: req.body.name,
     calories: req.body.calories,
     date: req.body.date,
   };
-  var callback = function (result) {
+  var callback = function () {
     res.json({ 'status': 'ok' });
   };
   myMeal.addMeal(newMeal, callback);
 });
 
-app.get('/meals', function (req, res) {
+app.delete('/meals/:id', function (req, res) {
+  var deleteMeal = { id: req.params.id };
   var callback = function (result) {
     res.json(result);
   };
-  myMeal.getMeal(callback);
+  myMeal.delMeal(deleteMeal, callback);
 });
 
 app.listen(3000);
