@@ -17,6 +17,7 @@ function delMealsTable() {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
+  document.querySelector('#sum-of-calories').textContent = 0;
 }
 
 function showMeal(newElement) {
@@ -36,11 +37,14 @@ function showMeal(newElement) {
 
 function getMeals() {
   const xhr = new XMLHttpRequest();
-  delMealsTable();
+  let sumCalories = 0;
   xhr.onload = function () {
+    delMealsTable();
     JSON.parse(xhr.response).forEach(function (e) {
       showMeal(e);
+      sumCalories += e.calories;
     });
+    document.querySelector('#sum-of-calories').textContent = sumCalories;
   };
   xhr.open('GET', url);
   xhr.send();
@@ -60,11 +64,14 @@ function addMeal() {
 
 function filterMeal(filter) {
   const xhr = new XMLHttpRequest();
-  delMealsTable();      // call if filter Callback return
+  let sumCalories = 0;
   xhr.onload = function () {
+    delMealsTable();
     JSON.parse(xhr.response).forEach(function (e) {
       showMeal(e);
+      sumCalories += e.calories;
     });
+    document.querySelector('#sum-of-calories').textContent = sumCalories;
   };
   xhr.open('GET', url + '/' + filter);
   xhr.send();
