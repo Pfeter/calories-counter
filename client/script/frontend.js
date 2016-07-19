@@ -59,6 +59,8 @@ function addMeal() {
   xhr.open('POST', url);
   xhr.setRequestHeader('content-type', 'application/json');
   xhr.send(JSON.stringify(inputValues));
+  document.querySelector('#input-meal').value = '';
+  document.querySelector('#input-calories').value = '';
   getMeals();
 }
 
