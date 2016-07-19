@@ -27,6 +27,14 @@ app.get('/meals', function (req, res) {
   myMeal.getMeal(callback);
 });
 
+app.get('/meals/:filter', function (req, res) {
+  var filterDate = req.params.filter;
+  var callback = function (result) {
+    res.json(result);
+  };
+  myMeal.filterMeal(filterDate, callback);
+});
+
 app.post('/meals', function (req, res) {
   var newMeal = {
     name: req.body.name,

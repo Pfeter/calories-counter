@@ -36,10 +36,20 @@ var meal = function (connection) {
     });
   }
 
+  function filterMeal(filterDate, callback) {
+    connection.query('SELECT * FROM meals WHERE meals.date LIKE ?', filterDate + '%', function (err, result) {
+      if (err) {
+        return console.log(err.toString());
+      }
+      callback(result);
+    });
+  }
+
   return {
     addMeal: addMeal,
     getMeal: getMeal,
     delMeal: delMeal,
+    filterMeal: filterMeal,
   };
 };
 

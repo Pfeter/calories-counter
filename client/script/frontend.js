@@ -3,22 +3,20 @@
 const url = 'http://localhost:3000/meals';
 
 function getNowDatetime() {
-  var mealTimeField = document.getElementById('meal-time');
+  var mealTimeField = document.querySelector('#meal-time');
+  var filterTimeField = document.querySelector('#filter-time');
   var now = new Date();
   mealTimeField.valueAsNumber = now.getTime();
+  filterTimeField.valueAsNumber = now.getTime();
 }
 
 getNowDatetime();
 
-function addMeal() {
-  const xhr = new XMLHttpRequest();
-  const inputMeal = document.querySelector('#input-meal').value;
-  const inputCalories = document.querySelector('#input-calories').value;
-  const inputMealTime = document.querySelector('#meal-time').value;
-  const inputValues = { name: inputMeal, calories: inputCalories, date: inputMealTime };
-  xhr.open('POST', url);
-  xhr.setRequestHeader('content-type', 'application/json');
-  xhr.send(JSON.stringify(inputValues));
+function delMealsTable() {
+  var element = document.querySelector('#meals');
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
 }
 
 function showMeal(newElement) {
@@ -38,6 +36,7 @@ function showMeal(newElement) {
 
 function getMeals() {
   const xhr = new XMLHttpRequest();
+  delMealsTable();
   xhr.onload = function () {
     JSON.parse(xhr.response).forEach(function (e) {
       showMeal(e);
@@ -47,8 +46,40 @@ function getMeals() {
   xhr.send();
 }
 
+function addMeal() {
+  const xhr = new XMLHttpRequest();
+  const inputMeal = document.querySelector('#input-meal').value;
+  const inputCalories = document.querySelector('#input-calories').value;
+  const inputMealTime = document.querySelector('#meal-time').value;
+  const inputValues = { name: inputMeal, calories: inputCalories, date: inputMealTime };
+  xhr.open('POST', url);
+  xhr.setRequestHeader('content-type', 'application/json');
+  xhr.send(JSON.stringify(inputValues));
+  getMeals();
+}
+
+function filterMeal(filter) {
+  const xhr = new XMLHttpRequest();
+  delMealsTable();      // call if filter Callback return
+  xhr.onload = function () {
+    JSON.parse(xhr.response).forEach(function (e) {
+      showMeal(e);
+    });
+  };
+  xhr.open('GET', url + '/' + filter);
+  xhr.send();
+}
+
 document.querySelector('.add-button').addEventListener('click', function () {
   addMeal();
+});
+
+document.querySelector('.filter-button').addEventListener('click', function () {
+  filterMeal(document.querySelector('#filter-time').value);
+});
+
+document.querySelector('.show-all-button').addEventListener('click', function () {
+  getMeals();
 });
 
 getMeals();
