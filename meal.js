@@ -3,19 +3,7 @@
 const mysql = require('mysql');
 
 var meal = function (connection) {
-  function getMeal(callback) {
-    connection.query('SELECT * FROM meals;', function (err, result) {
-      if (err) {
-        return console.log(err.toString());
-      }
-      callback(result);   // res.json({ "meals": data });
-    });
-  }
-
-  function addMeal(newMeal, callback) {
-    let newQuery = 'INSERT INTO meals (name, calories, date) VALUES (?, ?, ?)';
-    const table = [newMeal.name, newMeal.calories, newMeal.date];
-    newQuery = mysql.format(newQuery, table);
+  function getQuery(newQuery, callback) {
     connection.query(newQuery, function (err, result) {
       if (err) {
         return console.log(err.toString());
@@ -24,9 +12,21 @@ var meal = function (connection) {
     });
   }
 
+  function getMeal(callback) {
+    getQuery('SELECT * FROM meals;', callback);
+  }
+
+  function addMeal(newMeal, callback) {
+    let newQuery = 'INSERT INTO meals (name, calories, date) VALUES (?, ?, ?)';
+    const table = [newMeal.name, newMeal.calories, newMeal.date];
+    newQuery = mysql.format(newQuery, table);
+    getQuery(newQuery, callback);
+  }
+
   function delMeal(deleteMeal, callback) {
     let result = {};
-    connection.query('UPDATE meals SET deleted = "true" WHERE id = ?', deleteMeal.id, function (err) {
+    const newQuery = 'UPDATE meals SET deleted = "true" WHERE id = '.concat('"', deleteMeal.id, '"');
+    connection.query(newQuery, function (err) {
       if (err) {
         result = { status: 'not exists' };
       } else {
@@ -37,12 +37,8 @@ var meal = function (connection) {
   }
 
   function filterMeal(filterDate, callback) {
-    connection.query('SELECT * FROM meals WHERE meals.date LIKE ?', filterDate + '%', function (err, result) {
-      if (err) {
-        return console.log(err.toString());
-      }
-      callback(result);
-    });
+    const newQuery = 'SELECT * FROM meals WHERE meals.date LIKE '.concat('"', filterDate, '%', '"');
+    getQuery(newQuery, callback);
   }
 
   return {
