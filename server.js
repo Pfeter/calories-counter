@@ -2,14 +2,17 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+// const mysql = require('mysql');
+const con = require('./CONFIG');
+const connection = con.con;
+
+const meal = require('./meal');
+const myMeal = meal(connection);
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('client'));
-
-const mysql = require('mysql');
-const con = require('./CONFIG');
-const connection = con.con;
 
 connection.connect(function (err) {
   if (err) {
@@ -19,26 +22,22 @@ connection.connect(function (err) {
 });
 
 app.post('/meals', function (req, res) {
-  let newQuery = 'INSERT INTO meals (name, calories, date) VALUES (?, ?, ?)';
-  const table = [req.body.name, req.body.calories, req.body.date];
-  newQuery = mysql.format(newQuery, table);
-  connection.query(newQuery, function (err) {
-    if (err) {
-      return console.log(err.toString());
-    }
-    res.json({
-      status: 'ok',
-    });
-  });
+  var newMeal = {
+    name: req.body.name,
+    calories: req.body.calories,
+    date: req.body.date,
+  };
+  var callback = function (result) {
+    res.json({ 'status': 'ok' });
+  };
+  myMeal.addMeal(newMeal, callback);
 });
 
 app.get('/meals', function (req, res) {
-  connection.query('SELECT * FROM meals;', function (err, data) {
-    if (err) {
-      return console.log(err.toString());
-    }
-    res.json(data);   // res.json({ "meals": data });
-  });
+  var callback = function (result) {
+    res.json(result);
+  };
+  myMeal.getMeal(callback);
 });
 
 app.listen(3000);
