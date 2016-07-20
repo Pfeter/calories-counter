@@ -3,7 +3,8 @@
 const mysql = require('mysql');
 
 var meal = function (connection) {
-  function getQuery(newQuery, callback) {
+  function getQuery(newQuery, table, callback) {
+    newQuery = mysql.format(newQuery, table);
     connection.query(newQuery, function (err, result) {
       if (err) {
         return console.log(err.toString());
@@ -13,32 +14,26 @@ var meal = function (connection) {
   }
 
   function getMeal(callback) {
-    getQuery('SELECT * FROM meals;', callback);
+    const newQuery = 'SELECT * FROM meals;';
+    getQuery(newQuery, [], callback);
   }
 
   function addMeal(newMeal, callback) {
-    let newQuery = 'INSERT INTO meals (name, calories, date) VALUES (?, ?, ?)';
+    const newQuery = 'INSERT INTO meals (name, calories, date) VALUES (?, ?, ?);';
     const table = [newMeal.name, newMeal.calories, newMeal.date];
-    newQuery = mysql.format(newQuery, table);
-    getQuery(newQuery, callback);
+    getQuery(newQuery, table, callback);
   }
 
   function delMeal(deleteMeal, callback) {
-    let result = {};
-    const newQuery = 'UPDATE meals SET deleted = "true" WHERE id = '.concat('"', deleteMeal.id, '"');
-    connection.query(newQuery, function (err) {
-      if (err) {
-        result = { status: 'not exists' };
-      } else {
-        result = { status: 'ok' };
-      }
-      callback(result);
-    });
+    const newQuery = 'UPDATE meals SET deleted = "true" WHERE id = (?);';
+    const table = [deleteMeal.id];
+    getQuery(newQuery, table, callback);
   }
 
   function filterMeal(filterDate, callback) {
-    const newQuery = 'SELECT * FROM meals WHERE meals.date LIKE '.concat('"', filterDate, '%', '"');
-    getQuery(newQuery, callback);
+    const newQuery = 'SELECT * FROM meals WHERE meals.date LIKE (?);';
+    const table = [filterDate + '%'];
+    getQuery(newQuery, table, callback);
   }
 
   return {
