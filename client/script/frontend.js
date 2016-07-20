@@ -10,8 +10,6 @@ function getNowDatetime() {
   filterTimeField.valueAsNumber = now.getTime();
 }
 
-getNowDatetime();
-
 function delMealsTable() {
   var element = document.querySelector('#meals');
   while (element.firstChild) {
@@ -35,16 +33,18 @@ function showMeal(newElement) {
   newDate.textContent = newElement.date;
 }
 
+function sumCalories(xhrResponse) {
+  return JSON.parse(xhrResponse).reduce(function (pv, cv) { return pv + cv.calories; }, 0);
+}
+
 function getMeals() {
   const xhr = new XMLHttpRequest();
-  let sumCalories = 0;
   xhr.onload = function () {
     delMealsTable();
     JSON.parse(xhr.response).forEach(function (e) {
       showMeal(e);
-      sumCalories += e.calories;
     });
-    document.querySelector('#sum-of-calories').textContent = sumCalories;
+    document.querySelector('#sum-of-calories').textContent = sumCalories(xhr.response);
   };
   xhr.open('GET', url);
   xhr.send();
@@ -66,14 +66,12 @@ function addMeal() {
 
 function filterMeal(filter) {
   const xhr = new XMLHttpRequest();
-  let sumCalories = 0;
   xhr.onload = function () {
     delMealsTable();
     JSON.parse(xhr.response).forEach(function (e) {
       showMeal(e);
-      sumCalories += e.calories;
     });
-    document.querySelector('#sum-of-calories').textContent = sumCalories;
+    document.querySelector('#sum-of-calories').textContent = sumCalories(xhr.response);
   };
   xhr.open('GET', url + '/' + filter);
   xhr.send();
@@ -91,4 +89,5 @@ document.querySelector('.show-all-button').addEventListener('click', function ()
   getMeals();
 });
 
+getNowDatetime();
 getMeals();
