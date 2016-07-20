@@ -4,8 +4,8 @@ const mysql = require('mysql');
 
 var meal = function (connection) {
   function getQuery(newQuery, table, callback) {
-    newQuery = mysql.format(newQuery, table);
-    connection.query(newQuery, function (err, result) {
+    const fullQuery = mysql.format(newQuery, table);
+    connection.query(fullQuery, function (err, result) {
       if (err) {
         return console.log(err.toString());
       }
