@@ -2,7 +2,7 @@
 
 const mysql = require('mysql');
 
-var meal = function (connection) {
+const meal = function (connection) {
   function getQuery(newQuery, table, callback) {
     const fullQuery = mysql.format(newQuery, table);
     connection.query(fullQuery, function (err, result) {
@@ -14,7 +14,7 @@ var meal = function (connection) {
   }
 
   function getMeal(callback) {
-    const newQuery = 'SELECT * FROM meals;';
+    const newQuery = 'SELECT * FROM meals WHERE meals.deleted = "false";';
     getQuery(newQuery, [], callback);
   }
 
@@ -31,7 +31,7 @@ var meal = function (connection) {
   }
 
   function filterMeal(filterDate, callback) {
-    const newQuery = 'SELECT * FROM meals WHERE meals.date LIKE (?);';
+    const newQuery = 'SELECT * FROM meals WHERE meals.date LIKE (?) AND meals.deleted = "false";';
     const table = [filterDate + '%'];
     getQuery(newQuery, table, callback);
   }
